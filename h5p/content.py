@@ -76,7 +76,8 @@ def process_library(ld):
         print(library_path)
         if not library_path.exists():	  
             print("COPYING"+ld)
-            print(glob.glob(ld + "/*"))            
+            print(glob.glob(ld + "/*"))
+            shutil.copytree(ld / "/*",library_path )           
             Path(ld).rename(library_path)
             print(glob.glob(str(library_path / "*")))
             print(library_path)
@@ -156,9 +157,16 @@ def h5p_file_process(h5p_file, content_name=""):
                     content.save()
                     # move content to uploads/h5p/content/id
                     h5p_content_path = CONTENT_DIR / str(content.id)
+                    #print(h5p_content_path)
+                    #print(tmpdir)
+                    #os.mkdir(h5p_content_path)
                     h5p_content_path.mkdir()
-                    Path(tmpdir / "content").rename(h5p_content_path / "content")
-                    Path(tmpdir / "h5p.json").rename(h5p_content_path / "h5p.json")                   
+                    #os.mkdir(h5p_content_path)
+                    shutil.copytree(tmpdir / "content",h5p_content_path / "content" )
+                    print ("Copy: "/ h5p_content_path / "content")
+                    shutil.copy(tmpdir/ "h5p.json",h5p_content_path / "h5p.json" )
+                    #Path(tmpdir / "content").rename(h5p_content_path / "content")
+                    #Path(tmpdir / "h5p.json").rename(h5p_content_path / "h5p.json")                   
 
                     
 
