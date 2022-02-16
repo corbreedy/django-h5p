@@ -74,19 +74,25 @@ def process_library(ld):
         library.json = ld_json
         library_path = Path(LIBRARY_DIR / f"{library.machine_name}-{library.major_version}.{library.minor_version}")
         print(library_path)
-        if not library_path.exists():	  
-            print("COPYING"+ld)
-            print(glob.glob(ld + "/*"))
-            shutil.copytree(ld / "/*",library_path )           
-            Path(ld).rename(library_path)
-            print(glob.glob(str(library_path / "*")))
-            print(library_path)
+        if not library_path.exists():
+            #library_path.mkdir(parents=True, exist_ok=True)	  
+            print("process_library:COPYING: "+ld)
+            #print(glob.glob(ld + "/*"))
+            shutil.copytree(ld ,library_path )           
+            #Path(ld).rename(library_path)
+            #print(glob.glob(str(library_path / "*")))
+            #print(library_path)
         else:
             print(library_path.exists())
     else:
-        #print("Process Library="+ld)
-        #print(ld_json)
-        print("")
+        print("Process existing Library="+ld)
+        library_path = Path(LIBRARY_DIR / f"{library.machine_name}-{library.major_version}.{library.minor_version}")
+        print(library_path)
+        if not library_path.exists():
+            print("!!!Doesnt exist: "+str(library_path))
+            shutil.copytree(ld ,library_path )    
+            #print(ld_json)
+        #print("")
     return library
 
 
@@ -129,6 +135,7 @@ def h5p_file_process(h5p_file, content_name=""):
             subdirs = get_subdirectories(tmpdir)
             libdirs = []
             for sd in subdirs:
+                print("Have:"+sd)
                 subdir_lib_path = Path(sd) / "library.json"
                 if subdir_lib_path.is_file():
                     libdirs.append(sd)
@@ -174,7 +181,7 @@ def h5p_file_process(h5p_file, content_name=""):
 #        print (e)
 
     #shutil.rmtree(tmpdir)
-    return None
+    return content.id
 
 
 def process_update(h5p_file):
