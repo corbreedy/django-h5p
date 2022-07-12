@@ -41,12 +41,11 @@ def h5p_view_content(request, content_id):
         # todo redirect to index
         return redirect("/")
 
-    ajax_path = "/h5p/ajax/"
 
     # todo log view
     return render(request, 'h5p_view_content.html', {
-        'content': content,
-        'ajax_path': ajax_path
+        'content': content, #
+        'token':'132323',
     })
 
 
