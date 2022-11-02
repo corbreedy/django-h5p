@@ -155,7 +155,8 @@ def h5p_file_process(h5p_file, content_name=""):
                     content_json = json.load(content_file)
                     mav=get_main_and_version(h5p_json)
                     #print(mav)
-                    main_library = H5PLibrary.objects.get(machine_name=mav["mainlib"],major_version=mav["major"],minor_version=mav['minor'])
+                    #main_library = H5PLibrary.objects.get(machine_name=mav["mainlib"],major_version=mav["major"],minor_version=mav['minor'],patch_version=mav["patch"])
+                    main_library = H5PLibrary.objects.filter(machine_name=mav["mainlib"],major_version=mav["major"],minor_version=mav['minor']).latest('patch_version')
                     content = H5PContent.objects.create(json_content=json.dumps(content_json), main_library=main_library, name=content_name)
 
                     for key in [("embedTypes", "embed_types"), ("contentType", "content_type"), ("author", "author"), ("license", "license"), ("metaKeywords", "meta_keywords"), ("metaDescription", "meta_description"), ("filtered", "filtered"), ("slug", "slug")]:
@@ -213,6 +214,7 @@ def get_main_and_version(hp5_json):
     }
     for item in hp5_json["preloadedDependencies"]:
         if item['machineName']==main_name:
+            print (item)
             rv['major']=item['majorVersion']
             rv['minor']=item['minorVersion']
     return rv
